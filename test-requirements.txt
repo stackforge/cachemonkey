@@ -1,0 +1,6 @@
+coverage>=3.6
+hacking>=0.8.0,<0.9
+pylint==0.25.2
+testrepository>=0.0.17
+testscenarios>=0.4
+testtools>=0.9.32,<0.9.35

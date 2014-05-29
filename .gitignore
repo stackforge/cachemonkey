@@ -1,2 +1,8 @@
+.coverage
+*.egg
+*.egg-info
 *.pyc
 *.swp
+.testrepository
+.tox
+cover/*
