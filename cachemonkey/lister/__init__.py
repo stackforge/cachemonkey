@@ -12,28 +12,3 @@
 #    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 #    License for the specific language governing permissions and limitations
 #    under the License.
-
-from oslo.config import cfg
-
-from cachemonkey.openstack.common import importutils
-from cachemonkey.openstack.common import log as logging
-
-LOG = logging.getLogger(__name__)
-CONF = cfg.CONF
-
-opts = [
-    cfg.StrOpt('lister_class',
-               default='cachemonkey.lister.glance.GlanceLister',
-               help='Class to determine which images get pre-cached'),
-]
-
-CONF.register_opts(opts, group='cachemonkey')
-
-
-class Cacher(object):
-
-    def __init__(self):
-        self.lister = importutils.import_object(CONF.cachemonkey.lister_class)
-
-    def cache(self):
-        images = self.lister.images()
