@@ -13,30 +13,12 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-import sys
-
-from oslo.config import cfg
-import pbr.version
-
 from cachemonkey.openstack.common import log as logging
-from cachemonkey.openstack.common import service
-from cachemonkey import service as cmservice
 
-project = 'cachemonkey'
+LOG = logging.getLogger(__name__)
 
 
-def _version():
-    vinfo = pbr.version.VersionInfo(project)
-    return vinfo.version_string()
+class Cacher(object):
 
-
-def main():
-    version = _version()
-    cfg.CONF(sys.argv[1:], project=project, version=version)
-    logging.setup(project, version=version)
-
-    service_ = cmservice.Service()
-
-    launcher = service.ServiceLauncher()
-    launcher.launch_service(service_)
-    launcher.wait()
+    def cache(self):
+        LOG.debug("cache stuff")
