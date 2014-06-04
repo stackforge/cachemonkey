@@ -37,3 +37,5 @@ class Cacher(object):
 
     def cache(self):
         images = self.lister.images()
+        for image in images:
+            LOG.debug(image)

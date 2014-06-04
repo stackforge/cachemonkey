@@ -13,9 +13,48 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+import glanceclient
+from oslo.config import cfg
+
+from cachemonkey import auth
+from cachemonkey.openstack.common import log as logging
+
+LOG = logging.getLogger(__name__)
+CONF = cfg.CONF
+
+opt = cfg.StrOpt('endpoint', help='Glance endpoint (override catalog)')
+CONF.register_opt(opt, group='glance')
+
 
 class GlanceLister(object):
 
+    def __init__(self):
+        self.authclient = auth.Client()
+        self.authclient.auth()
+        endpoint = self._endpoint()
+
+        api_version = 2
+        token = self.authclient.token
+        self.client = glanceclient.Client(api_version, endpoint, token=token)
+
     def images(self):
+        LOG.debug('Fetching image list')
         # list images to be cached.
-        pass
+        images = self.client.images.list()
+        return images
+
+    def _endpoint(self):
+        # if an endpoint is provided via config, prefer that
+        if CONF.glance.endpoint:
+            return CONF.glance.endpoint
+
+        # fallback to getting the glance endpoint from the service catalog
+        catalog = self.authclient.catalog
+        image_endpoints = catalog.get_endpoints()['image']
+
+        LOG.debug('Image endpoints: %s' % image_endpoints)
+        if len(image_endpoints) > 1:
+            LOG.warn('Expected a single image endpoint, but there are %d' %
+                     len(image_endpoints))
+
+        return image_endpoints[0]['publicURL']
