@@ -19,13 +19,20 @@ from cachemonkey.openstack.common import log as logging
 LOG = logging.getLogger(__name__)
 
 
-class GlanceLister(object):
+class GlanceFetcher(object):
+    """Fetch image data via Glance."""
 
     def __init__(self):
         self.client = glance.Client()
 
-    def images(self):
-        LOG.debug('Fetching image list')
-        # list images to be cached.
-        images = self.client.images.list()
-        return images
+    def fetch(self, image, filename):
+        LOG.debug('Fetching image %s' % image['id'])
+
+        # glance client returns a iterator over the response
+        # downloads 64KB at a time.
+        resp = self.client.images.data(image['id'], do_checksum=True)
+
+        f = open(filename, 'wb')
+        for chunk in resp:
+            f.write(chunk)
+        f.close()
