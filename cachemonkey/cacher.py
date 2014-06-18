@@ -50,7 +50,6 @@ class Cacher(object):
             CONF.cachemonkey.fetcher_class)
 
         self.discoverer = discover.ComputeDiscoverer()
-        self.images = []
 
     def cache(self):
         self.images = []
@@ -58,8 +57,8 @@ class Cacher(object):
 
         for image in images:
             filename = self._get(image)
-            image = {'meta': image, 'filename': filename}
-            self.images.append(image)
+
+            self.publisher.publish(image, filename)
 
             # HACK(belliott) - just process first image for testing
             break
