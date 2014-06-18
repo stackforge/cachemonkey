@@ -32,8 +32,13 @@ CONF.register_opts(opts, group='glance')
 class Client(object):
     """Glance client wrapper that handles auth and config."""
 
-    def __init__(self):
-        self.authclient = auth.Client()
+    def __init__(self, auth_client=None):
+
+        if auth_client:
+            self.authclient = auth_client
+        else:
+            self.authclient = auth.Client()
+
         self.authclient.auth()
 
         self.endpoints = self._endpoints()
@@ -46,7 +51,7 @@ class Client(object):
     def _client(self):
         # pick a glance endpoint via round-robin
         endpoint = self.endpoints[self.next_]
-        self.next_ += 1
+        self.next_ = (self.next_ + 1) % len(self.endpoints)
 
         api_version = 2
         token = self.authclient.token
