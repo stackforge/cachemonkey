@@ -57,4 +57,3 @@ class ComputeDiscoverer(object):
 
         # TODO(belliott) parse response, handle errors
         return []
-        
