@@ -1,4 +1,0 @@
-coverage>=3.6
-hacking>=0.8.0,<0.9
-oslotest
-pylint==0.25.2

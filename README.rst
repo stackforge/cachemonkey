@@ -1,20 +1,7 @@
-cachemonkey
-===========
+This project is no longer maintained.
 
-What is it?
------------
+The contents of this repository are still available in the Git source code
+management system. To see the contents of this repository before it reached
+its end of life, please check out the previous commit with 
+"git checkout HEAD^1".
 
-A service for managing pre-caching of VM images in Nova.
-
-1. Determine what images to pre-cache
-2. Signal nova-api to cache images
-3. Profit
-
-Details
--------
-
-Juno summit session:
-https://etherpad.openstack.org/p/juno-nova-image-precaching
-
-Related nova-spec:
-https://review.openstack.org/#/c/85792/
